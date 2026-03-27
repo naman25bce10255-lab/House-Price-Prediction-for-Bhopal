@@ -1,0 +1,40 @@
+import pandas as pd
+from sklearn.linear_model import LinearRegression
+
+# 1. 2026 Bhopal Market Data (Average Rates per Sq. Ft.)
+# These rates are based on current 2026 trends for apartments/villas.
+bhopal_rates = {
+    'Arera Colony': 6650,    # Posh segment
+    'Bawadia Kalan': 5650,   # Premium high-growth
+    'Kolar Road': 4030,      # Evolving residential
+    'Ayodhya Bypass': 4330,  # Modern townships
+    'Hoshangabad Road': 3920 # Major connectivity hub
+}
+
+# 2. Simple Prediction Logic 
+# (In your project, replace this with a model.predict() if using a trained CSV)
+def predict_price(area, sqft, bhk):
+    base_rate = bhopal_rates.get(area, 3500)
+    # Add a 5% premium for every extra BHK above 2
+    bhk_premium = 1 + (max(0, bhk - 2) * 0.05)
+    total_price = (base_rate * sqft * bhk_premium) / 100000 # Convert to Lakhs
+    return total_price
+
+# 3. Interactive User Interface
+print("--- 🏛️ Bhopal Real Estate AI Predictor (2026) ---")
+print("Select a locality from the options below:")
+
+colonies = list(bhopal_rates.keys())
+for i, colony in enumerate(colonies, 1):
+    print(f"{i}. {colony}")
+
+# Taking User Input
+choice = int(input("\nEnter the number of your choice: "))
+selected_area = colonies[choice - 1]
+
+sqft = int(input("Enter total area in Square Feet: "))
+bhk = int(input("Enter number of BHK (e.g., 2, 3, 4): "))
+
+# Output Prediction
+price = predict_price(selected_area, sqft, bhk)
+print(f"\n✅ Predicted Price for a {bhk} BHK in {selected_area}: ₹{price:.2f} Lakhs")
